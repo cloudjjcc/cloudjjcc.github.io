@@ -1,5 +1,7 @@
 sudo: false
 language: go
+go:
+    - master
 git:
     depth: 1
 install: 
