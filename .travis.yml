@@ -11,6 +11,7 @@ install:
     - cd hugo
     - go install --tags extended
 script:
+    - cd $GOPATH/src/github.com/cloudjjcc/Blog/
     - hugo
 deploy:
     provider: pages
