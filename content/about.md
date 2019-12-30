@@ -1,8 +1,8 @@
----
-title: "AboutTest"
-date: 2019-12-27T16:03:27+08:00
-draft: true
----
-
-hello world
++++
+title = "About"
+description = "cloudjjcc'blog"
+date = "2019-02-28"
+aliases = ["about-us","about-hugo","contact"]
+author = "cloudjjcc"
++++
 
