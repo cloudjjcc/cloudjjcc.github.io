@@ -113,7 +113,7 @@ params:
       url: favicon.ico
     title: cloudjjcc's blog # 页面title
     favicon: favicon.ico
-    board: <p>enjoy~</p> # 公告牌
+    board: <p>博客正在建设中，敬请期待~~~</p> # 公告牌
 
   # Share
   # weibo,qq,qzone,wechat,tencent,douban,diandian,facebook,twitter,google,linkedin
@@ -172,7 +172,7 @@ params:
 
   # config
   config:
-    skin: # theme color default is white. other type [theme-black,theme-blue,theme-green,theme-purple]
+    skin:  # theme color default is white. other type [theme-black,theme-blue,theme-green,theme-purple]
     layout: main-center # main-left main-center main-right
     excerpt_link: Read More
     toc: true
