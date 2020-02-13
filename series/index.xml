@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Series on cloudjjcc&#39;s blog</title>
+    <link>https://cloudjjcc.github.io/series/</link>
+    <description>Recent content in Series on cloudjjcc&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Mon, 11 Mar 2019 00:00:00 +0000</lastBuildDate>
+    
+        <atom:link href="https://cloudjjcc.github.io/series/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>net/http源码分析</title>
+      <link>https://cloudjjcc.github.io/2019/03/net_http/</link>
+      <pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://cloudjjcc.github.io/2019/03/net_http/</guid>
+      <description>简介 net/http 包是 go 语言自带的包，实现了高性能的 http 服务器及 http 客户端，利用这个自带的包能够轻松的进行 web 开发。很多第三方的框架只不过是对此进行了封装，例</description>
+    </item>
+    
+    <item>
+      <title>Markdown Demo</title>
+      <link>https://cloudjjcc.github.io/2018/12/markdown_demo/</link>
+      <pubDate>Thu, 27 Dec 2018 17:49:39 +0800</pubDate>
+      
+      <guid>https://cloudjjcc.github.io/2018/12/markdown_demo/</guid>
+      <description>Demo Code void main(){ System.out.println(&amp;#34;hello world&amp;#34;) } Demo Flow graph TD; A--&amp;gt;B; A--&amp;gt;C; B--&amp;gt;D; C--&amp;gt;E; E--&amp;gt;F; D--&amp;gt;F; F--&amp;gt;G; Demo Sequence diagram sequenceDiagram participant Alice participant Bob Alice-&amp;gt;&amp;gt;John: Hello John, how are you? loop Healthcheck John-&amp;gt;John: Fight against hypochondria end Note right of John: Rational thoughts &amp;lt;br/&amp;gt;prevail... John--&amp;gt;Alice: Great! John-&amp;gt;Bob: How about you? Bob--&amp;gt;John: Jolly good! Demo ClassDiagram classDiagram Class01 &amp;lt;|-- AveryLongClass : Cool Class03 *-- Class04 Class05 o-- Class06 Class07 .</description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>https://cloudjjcc.github.io/about/</link>
+      <pubDate>Tue, 28 Feb 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://cloudjjcc.github.io/about/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
