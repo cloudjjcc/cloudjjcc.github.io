@@ -7,17 +7,17 @@ tags: [golang,服务端]
 categories: [golang,服务端]
 ---
 
-### 进程在哪些情况下会退出？
+## 进程在哪些情况下会退出？
 正常退出，程序crash，收到kill信号（如CTRL+C会向进程发送SIGINT信号，或者用kill命令发送信号）
 
-### kill PID 与 kill -9 PID 的区别
+## kill PID 与 kill -9 PID 的区别
 + kill PID 发送的是SIGTERM信号，可以被程序捕获
 + kill -9 PID 发送的是SIGKILL信号，不能被捕获，进程会被强制退出
 
-### 优雅退出原理
+## 优雅退出原理
 通过监听可被捕获的退出信号，如：SIGTERM，SIGINT等，在程序退出前完成收尾工作。
 
-### go语言中信号处理
+## go语言中信号处理
 go语言中可通过以下代码监听退出信号：
 ``` golang
 sigCh := make(chan os.Signal, 1)
@@ -26,7 +26,7 @@ signal.Notify(sigCh, syscall.SIGTERM, syscall.SIGINT)
 // 执行程序收尾工作。。。
 ```
 
-### http server 优雅退出
+## http server 优雅退出
 可以通过`Shutdown`方法进行优雅退出
 ``` golang
 // Shutdown gracefully shuts down the server without interrupting any
@@ -51,7 +51,7 @@ signal.Notify(sigCh, syscall.SIGTERM, syscall.SIGINT)
 // future calls to methods such as Serve will return ErrServerClosed.
 func (srv *Server) Shutdown(ctx context.Context) error {...}
 ```
-### gRPC server 优雅退出
+## gRPC server 优雅退出
 相应的gRPC server 也提供了优雅关闭的方法：
 ``` golang
 // GracefulStop stops the gRPC server gracefully. It stops the server from
@@ -60,7 +60,7 @@ func (srv *Server) Shutdown(ctx context.Context) error {...}
 func (s *Server) GracefulStop() {...}
 ```
 
-### k8s pod 优雅退出
+## k8s pod 优雅退出
 我们先来看Pod的退出流程：
 1. Pod 被删除，状态置为 Terminating。
 2. kube-proxy 更新转发规则，将 Pod 从 service 的 endpoint 列表中摘除掉，新的流量不再转发到该 Pod。
