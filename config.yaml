@@ -2,7 +2,7 @@ baseurl: https://cloudjjcc.github.io
 languageCode: en-us
 # theme: hugo-theme-stack
 paginate: 5
-title: cloudjjcc' blog
+title: cloudjjcc's blog
 copyright: cloudjjcc
 
 module:

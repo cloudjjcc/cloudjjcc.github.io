@@ -3,8 +3,8 @@ author: cloudjjcc
 title: go程序优雅退出
 date: 2019-05-08
 description: go程序如何进行优雅退出?
-tags: [golang,服务端]
-categories: [golang,服务端]
+tags: [golang]
+categories: [golang,架构设计]
 ---
 
 ## 进程在哪些情况下会退出？

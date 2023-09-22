@@ -3,10 +3,8 @@ author: cloudjjcc
 title: net/http源码分析
 date: 2019-03-11
 description: golang自带包net/http源码分析
-tags: [golang,源码分析,服务端]
-categories: [golang,源码分析,服务端]
-series: [golang 源码分析]
-# aliases:
+tags: [golang,http]
+categories: [golang,源码分析]
 ---
 
 ## 简介
