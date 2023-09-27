@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>架构设计 on cloudjjcc's blog</title><link>https://cloudjjcc.github.io/categories/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/</link><description>Recent content in 架构设计 on cloudjjcc's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>cloudjjcc</copyright><lastBuildDate>Wed, 08 May 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://cloudjjcc.github.io/categories/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/index.xml" rel="self" type="application/rss+xml"/><item><title>go程序优雅退出</title><link>https://cloudjjcc.github.io/p/go%E7%A8%8B%E5%BA%8F%E4%BC%98%E9%9B%85%E9%80%80%E5%87%BA/</link><pubDate>Wed, 08 May 2019 00:00:00 +0000</pubDate><guid>https://cloudjjcc.github.io/p/go%E7%A8%8B%E5%BA%8F%E4%BC%98%E9%9B%85%E9%80%80%E5%87%BA/</guid><description>&lt;h2 id="进程在哪些情况下会退出">进程在哪些情况下会退出？&lt;/h2>
+&lt;p>正常退出，程序crash，收到kill信号（如CTRL+C会向进程发送SIGINT信号，或者用kill命令发送信号）&lt;/p>
+&lt;h2 id="kill-pid-与-kill--9-pid-的区别">kill PID 与 kill -9 PID 的区别&lt;/h2>
+&lt;ul>
+&lt;li>kill PID 发送的是SIGTERM信号，可以被程序捕获&lt;/li>
+&lt;li>kill -9 PID 发送的是SIGKILL信号，不能被捕获，进程会被强制退出&lt;/li>
+&lt;/ul>
+&lt;h2 id="优雅退出原理">优雅退出原理&lt;/h2>
+&lt;p>通过监听可被捕获的退出信号，如：SIGTERM，SIGINT等，在程序退出前完成收尾工作。&lt;/p>
+&lt;h2 id="go语言中信号处理">go语言中信号处理&lt;/h2>
+&lt;p>go语言中可通过以下代码监听退出信号：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-golang" data-lang="golang">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">sigCh&lt;/span> &lt;span class="o">:=&lt;/span> &lt;span class="nb">make&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kd">chan&lt;/span> &lt;span class="nx">os&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Signal&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">signal&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">Notify&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">sigCh&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">syscall&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">SIGTERM&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">syscall&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">SIGINT&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">&amp;lt;-&lt;/span>&lt;span class="nx">sigCh&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 执行程序收尾工作。。。
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="http-server-优雅退出">http server 优雅退出&lt;/h2>
+&lt;p>可以通过&lt;code>Shutdown&lt;/code>方法进行优雅退出&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-golang" data-lang="golang">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// Shutdown gracefully shuts down the server without interrupting any
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// active connections. Shutdown works by first closing all open
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// listeners, then closing all idle connections, and then waiting
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// indefinitely for connections to return to idle and then shut down.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// If the provided context expires before the shutdown is complete,
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// Shutdown returns the context&amp;#39;s error, otherwise it returns any
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// error returned from closing the Server&amp;#39;s underlying Listener(s).
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">//
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// When Shutdown is called, Serve, ListenAndServe, and
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// ListenAndServeTLS immediately return ErrServerClosed. Make sure the
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// program doesn&amp;#39;t exit and waits instead for Shutdown to return.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">//
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// Shutdown does not attempt to close nor wait for hijacked
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// connections such as WebSockets. The caller of Shutdown should
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// separately notify such long-lived connections of shutdown and wait
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// for them to close, if desired. See RegisterOnShutdown for a way to
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// register shutdown notification functions.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">//
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// Once Shutdown has been called on a server, it may not be reused;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// future calls to methods such as Serve will return ErrServerClosed.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kd">func&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">srv&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="nx">Server&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="nf">Shutdown&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">ctx&lt;/span> &lt;span class="nx">context&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Context&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="kt">error&lt;/span> &lt;span class="p">{&lt;/span>&lt;span class="o">...&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="grpc-server-优雅退出">gRPC server 优雅退出&lt;/h2>
+&lt;p>相应的gRPC server 也提供了优雅关闭的方法：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-golang" data-lang="golang">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// GracefulStop stops the gRPC server gracefully. It stops the server from
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// accepting new connections and RPCs and blocks until all the pending RPCs are
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// finished.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="kd">func&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">s&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="nx">Server&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="nf">GracefulStop&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>&lt;span class="o">...&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="k8s-pod-优雅退出">k8s pod 优雅退出&lt;/h2>
+&lt;p>我们先来看Pod的退出流程：&lt;/p>
+&lt;ol>
+&lt;li>Pod 被删除，状态置为 Terminating。&lt;/li>
+&lt;li>kube-proxy 更新转发规则，将 Pod 从 service 的 endpoint 列表中摘除掉，新的流量不再转发到该 Pod。&lt;/li>
+&lt;li>如果 Pod 配置了 preStop Hook ，将会执行。&lt;/li>
+&lt;li>kubelet 对 Pod 中各个 container 发送 SIGTERM 信号以通知容器进程开始优雅停止。&lt;/li>
+&lt;li>等待容器进程完全停止，如果在 terminationGracePeriodSeconds 内 (默认 30s) 还未完全停止，就发送 SIGKILL 信号强制杀死进程。&lt;/li>
+&lt;li>所有容器进程终止，清理 Pod 资源。&lt;/li>
+&lt;/ol>
+&lt;p>要想实现Pod的优雅退出，需要我们的业务程序监听SIGTERM信号，并保证在terminationGracePeriodSeconds内完成退出，否则进程会被强制退出&lt;/p></description></item></channel></rss>

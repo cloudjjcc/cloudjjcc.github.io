@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>tcp on cloudjjcc's blog</title><link>https://cloudjjcc.github.io/tags/tcp/</link><description>Recent content in tcp on cloudjjcc's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>cloudjjcc</copyright><lastBuildDate>Tue, 19 Sep 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://cloudjjcc.github.io/tags/tcp/index.xml" rel="self" type="application/rss+xml"/><item><title>tcp必知必会</title><link>https://cloudjjcc.github.io/p/tcp%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/</link><pubDate>Tue, 19 Sep 2023 00:00:00 +0000</pubDate><guid>https://cloudjjcc.github.io/p/tcp%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/</guid><description>&lt;h2 id="连接的建立">连接的建立&lt;/h2>
+&lt;h3 id="三次握手">三次握手&lt;/h3>
+&lt;p>正常情况下，建立连接需要经过三次握手
+&lt;img src="https://cloudjjcc.github.io/p/tcp%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/tcp_connect.webp"
+width="1221"
+height="1019"
+srcset="https://cloudjjcc.github.io/p/tcp%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/tcp_connect_huae6de32ab6eefa48ceeddf6423032f79_34704_480x0_resize_q75_h2_box_2.webp 480w, https://cloudjjcc.github.io/p/tcp%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/tcp_connect_huae6de32ab6eefa48ceeddf6423032f79_34704_1024x0_resize_q75_h2_box_2.webp 1024w"
+loading="lazy"
+alt="alt 三次握手"
+class="gallery-image"
+data-flex-grow="119"
+data-flex-basis="287px"
+>&lt;/p>
+&lt;h2 id="连接的终止">连接的终止&lt;/h2>
+&lt;h3 id="正常终止四次挥手">正常终止（四次挥手）&lt;/h3>
+&lt;p>正常情况下，断开连接需要经过四次挥手
+&lt;img src="https://cloudjjcc.github.io/p/tcp%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/tcp_close.webp"
+width="753"
+height="794"
+srcset="https://cloudjjcc.github.io/p/tcp%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/tcp_close_hud41d731894ca7b48a5c4d3552ec24186_25858_480x0_resize_q75_h2_box_2.webp 480w, https://cloudjjcc.github.io/p/tcp%E5%BF%85%E7%9F%A5%E5%BF%85%E4%BC%9A/tcp_close_hud41d731894ca7b48a5c4d3552ec24186_25858_1024x0_resize_q75_h2_box_2.webp 1024w"
+loading="lazy"
+alt="alt 三次握手"
+class="gallery-image"
+data-flex-grow="94"
+data-flex-basis="227px"
+>&lt;/p>
+&lt;h3 id="异常终止rst报文">异常终止（RST报文）&lt;/h3>
+&lt;p>主动终止方发送RST报文立刻终止连接&lt;/p>
+&lt;h2 id="处于time_wait状态的连接过多怎么办">处于TIME_WAIT状态的连接过多怎么办？&lt;/h2>
+&lt;h3 id="如何查看连接状态">如何查看连接状态？&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">❯ netstat -ant&lt;span class="p">|&lt;/span>awk &lt;span class="s1">&amp;#39;/^tcp/ {++S[$NF]} END {for(a in S) print (a,S[a])}&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">LISTEN &lt;span class="m">32&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">CLOSE_WAIT &lt;span class="m">7&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">TIME_WAIT &lt;span class="m">3&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ESTABLISHED &lt;span class="m">119&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="什么情况下会产生大量的time_wait连接">什么情况下会产生大量的TIME_WAIT连接？&lt;/h3>
+&lt;p>我们知道TIME_WAIT是主动正常断开连接的一方所处的最后一个状态，这个状态会经历2MSL时长（2*30s）
+在Nginx反向代理中，在高并发短连接的场景下，可能导致大量的TIME_WAIT连接&lt;/p>
+&lt;h3 id="time_wait-危害">TIME_WAIT 危害&lt;/h3>
+&lt;ul>
+&lt;li>对于客户端：处于TIME_WAIT状态的连接占用的端口无法被再次使用，可能会导致端口耗尽，无法建立新的连接&lt;/li>
+&lt;li>对于服务端：大量的连接不被释放会消耗内存&lt;/li>
+&lt;/ul>
+&lt;h3 id="控制最大time_wait连接数">控制最大TIME_WAIT连接数&lt;/h3>
+&lt;p>Linux提供了tcp_max_tw_buckets参数，当TIME_WAIT连接数等于此参数值时，新的连接关闭时不会再经历TIME_WAIT状态，而是直接关闭。&lt;/p>
+&lt;h3 id="重用连接">重用连接&lt;/h3>
+&lt;p>Linux提供了tcp_tw_reuse 参数允许复用处于TIME_WAIT状态的连接&lt;/p></description></item></channel></rss>
